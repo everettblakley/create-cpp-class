@@ -1,6 +1,6 @@
 #include "%className%%headerExt%"
 
-//* 
+/** 
  * Default Constructor for %className%
  */
 %className%::%className%() {};

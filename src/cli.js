@@ -28,8 +28,8 @@ function replaceSpaces(input) {
 async function promptForMissingOptions(options) {
   const defaultHeaderDir = 'include';
   const defaultSourceDir = 'src';
-  const defaultHeaderExt = 'h';
-  const defaultSourceExt = 'cpp';
+  const defaultHeaderExt = '.h';
+  const defaultSourceExt = '.cpp';
 
   const questions = [];
 

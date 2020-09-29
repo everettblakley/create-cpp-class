@@ -10,7 +10,7 @@ async function replaceClassIdentifier(options) {
   return replace({
     files: path.resolve(options.headerDir, options.headerFile),
     from: classIdentifierRegex,
-    to: `${options.className.toUpperCase()}${options.headerExt ? `_${options.headerExt}` : ''}`,
+    to: `${options.className.toUpperCase()}${options.headerExt ? `_${options.headerExt.replace('.', '').toUpperCase()}` : ''}`,
   });
 }
 
@@ -36,7 +36,7 @@ async function replaceHeaderExtension(options) {
   return replace({
     files: options.sourceFile,
     from: headerExtRegex,
-    to: options.headerExt ? `.${options.headerExt}` : '',
+    to: options.headerExt,
   });
 }
 

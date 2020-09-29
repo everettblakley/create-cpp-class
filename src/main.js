@@ -35,9 +35,9 @@ export default async function createCppClass(options) {
   }
 
   const headerTemplate = path.resolve(templateDirectory, 'header');
-  const headerFile = `${options.className}${options.headerExt ? '.' : ''}${options.headerExt}`;
+  const headerFile = `${options.className}${options.headerExt}`;
   const sourceTemplate = path.resolve(templateDirectory, 'source');
-  const sourceFileName = `${options.className}.${options.sourceExt}`;
+  const sourceFileName = `${options.className}${options.sourceExt}`;
   const sourceFile = path.resolve(options.sourceDir, sourceFileName);
 
   const tasks = new Listr([
