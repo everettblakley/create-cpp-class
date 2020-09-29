@@ -39,5 +39,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/everettblakley/create-cpp-class.git"
-  }
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "templates/"
+  ]
 }
