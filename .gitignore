@@ -3,3 +3,6 @@ node_modules/
 
 # Test directory for manual tests
 .manual_tests/
+
+# Screen records
+**/*.fbr

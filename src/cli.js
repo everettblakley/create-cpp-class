@@ -221,7 +221,7 @@ function printHelp() {
 async function disclaimer(options) {
   let proceed = true;
   if (!options.dryRun) {
-    console.log(errorText('  DISCLAIMER  '));
+    console.log(errorText('❗❗DISCLAIMER❗❗'));
     console.log('Be aware that this program will overwrite any files that match any files specified in the output. You will have an opportunity to abort before any writes occur. Please be aware of the values you use.');
 
     const { proceedResponse } = await inquirer.prompt([

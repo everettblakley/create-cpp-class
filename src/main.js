@@ -30,7 +30,7 @@ export default async function createCppClass(options) {
   try {
     await access(templateDirectory, fs.constants.R_OK);
   } catch (err) {
-    console.error(`%s ${err}`, errorText('ERROR'));
+    console.error(`%s ${err}`, errorText('❌ERROR'));
     process.exit(1);
   }
 
@@ -57,6 +57,6 @@ export default async function createCppClass(options) {
   ]);
 
   await tasks.run();
-  console.log(`%s ${greenBoldText(options.className)} success created! Happy coding!`, successText('DONE'));
+  console.log(`%s ${greenBoldText(options.className)} success created! Happy coding!`, successText('🎉DONE'));
   return true;
 }
