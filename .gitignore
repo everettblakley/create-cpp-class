@@ -1,2 +1,5 @@
 node_modules/
 **/*.tgz
+
+# Test directory for manual tests
+.manual_tests/
