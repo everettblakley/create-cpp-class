@@ -1,12 +1,14 @@
 import arg from 'arg';
 import inquirer from 'inquirer';
-import chalk from 'chalk';
 import createCppClass from './main';
+import {
+  errorText, successText, greenBoldText, redBoldText, inverseText,
+} from './utilities';
 
 function parseArgumentsIntoOptions(rawArgs) {
   let args;
 
-  const errorMessage = `${chalk.red.bold('Invalid arguments provided.')} Try running with ${chalk.inverse('--help')} for more information`
+  const errorMessage = `${errorText('Invalid arguments provided.')} Try running with ${inverseText('--help')} for more information`;
 
   try {
     args = arg(
@@ -92,24 +94,24 @@ async function promptForMissingOptions(options) {
     let classNameLogStatement;
 
     if (error !== undefined && error !== false) {
-      classNameLogStatement = chalk.white.bgRed(options.className);
+      classNameLogStatement = errorText(options.className);
       const newClassName = replaceSpaces(options.className);
       switch (error) {
         case classNameEmptyErrorMessage:
-          classNameQuestion.message = `${error}. ${defaultClassNameQuestionMessage}`;
+          classNameQuestion.message = `${errorText(error)}. ${defaultClassNameQuestionMessage}`;
           break;
         case classNameContainsIllegalCharacters:
-          classNameQuestion.message = `${error}. ${defaultClassNameQuestionMessage}`;
+          classNameQuestion.message = `${errorText(error)}. ${defaultClassNameQuestionMessage}`;
           break;
         case classNameContainsSpaces:
-          classNameQuestion.message = `${error}. Replace with "${newClassName}"?`;
+          classNameQuestion.message = `${errorText(error)}. Replace with "${newClassName}"?`;
           classNameQuestion.type = 'confirm';
           break;
         default:
           break;
       }
     } else {
-      classNameLogStatement = chalk.white.bgGreen(options.className);
+      classNameLogStatement = successText(options.className);
     }
     console.log(`Recieved class name of ${classNameLogStatement}`);
   }
@@ -121,7 +123,7 @@ async function promptForMissingOptions(options) {
     validate: (input) => validateClassName(input),
     transformer: (input) => replaceSpaces(input),
     filter: (input) => replaceSpaces(input),
-    when: () => error,
+    when: () => error || !options.className,
   });
 
   questions.push({
@@ -178,10 +180,15 @@ async function promptForMissingOptions(options) {
   const sourceDir = answers.sourceDir || defaultSourceDir;
   const sourceExt = answers.sourceExt || defaultSourceExt;
 
-  console.log(`Creating class ${chalk.green.bold(className)}`);
-  console.log(`Creating header file ${chalk.green.bold(`${headerDir}/${className}${headerExt}`)}`);
+  console.log();
+
+  if (options.dryRun) {
+    console.log(`${inverseText('Dry run enabled')} The following is an example of what would be created if ran without the "--dry-run" (or "-d") flag\n`);
+  }
+  console.log(`Class name: ${greenBoldText(className)}`);
+  console.log(`Header file: ${greenBoldText(`${headerDir}/${className}${headerExt}`)}`);
   if (options.createSource) {
-    console.log(`Creating source file ${chalk.green.bold(`${sourceDir}/${className}${sourceExt}`)}`);
+    console.log(`Source file: ${greenBoldText(`${sourceDir}/${className}${sourceExt}`)}`);
   }
 
   let proceed = false;
@@ -211,19 +218,45 @@ function printHelp() {
   console.log('To be implented');
 }
 
+async function disclaimer(options) {
+  let proceed = true;
+  if (!options.dryRun) {
+    console.log(errorText('  DISCLAIMER  '));
+    console.log('Be aware that this program will overwrite any files that match any files specified in the output. You will have an opportunity to abort before any writes occur. Please be aware of the values you use.');
+
+    const { proceedResponse } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'proceedResponse',
+        message: 'Proceed with this program?',
+      },
+    ]);
+    proceed = proceedResponse;
+  }
+  return {
+    ...options,
+    proceed,
+  };
+}
+
 // eslint-disable-next-line import/prefer-default-export
 export async function cli(args) {
   let options = parseArgumentsIntoOptions(args);
   if (options.help) {
     return printHelp();
   }
-  options = await promptForMissingOptions(options);
-  if (!options.dryRun) {
-    if (options.proceed) {
-      await createCppClass(options);
-    } else {
-      console.log(chalk.red.bold('Create Class process aborted'));
+  options = await disclaimer(options);
+  if (options.proceed) {
+    options = await promptForMissingOptions(options);
+    if (!options.dryRun) {
+      if (options.proceed) {
+        await createCppClass(options);
+      } else {
+        console.log(redBoldText('Create class process aborted'));
+      }
     }
+  } else {
+    console.log(redBoldText('Disclaimer not accepted. Aborting'));
   }
   return true;
 }

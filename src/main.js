@@ -1,9 +1,9 @@
-import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
 import Listr from 'listr';
 import renameTemplateVariables from './replaceTempateText';
+import { errorText, greenBoldText, successText } from './utilities';
 
 const access = promisify(fs.access);
 
@@ -30,7 +30,7 @@ export default async function createCppClass(options) {
   try {
     await access(templateDirectory, fs.constants.R_OK);
   } catch (err) {
-    console.error(`%s ${err}`, chalk.red.bold('ERROR'));
+    console.error(`%s ${err}`, errorText('ERROR'));
     process.exit(1);
   }
 
@@ -42,11 +42,11 @@ export default async function createCppClass(options) {
 
   const tasks = new Listr([
     {
-      title: `Creating ${headerFile} in ./${options.headerDir}`,
+      title: `Creating header "${greenBoldText(headerFile)}" in ./${options.headerDir}`,
       task: () => copyTemplateFile(headerTemplate, options.headerDir, headerFile),
     },
     {
-      title: `Creating ${sourceFileName} in ./${options.sourceDir}`,
+      title: `Creating source "${greenBoldText(sourceFileName)}" in ./${options.sourceDir}`,
       task: () => copyTemplateFile(sourceTemplate, options.sourceDir, sourceFile),
       enabled: () => options.createSource,
     },
@@ -57,6 +57,6 @@ export default async function createCppClass(options) {
   ]);
 
   await tasks.run();
-  console.log(`%s ${options.className} success created! Happy coding!`, chalk.green.bold('DONE'));
+  console.log(`%s ${greenBoldText(options.className)} success created! Happy coding!`, successText('DONE'));
   return true;
 }
