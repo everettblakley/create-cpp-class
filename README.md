@@ -82,15 +82,15 @@ If you don't want to go through the class name prompts, you can use the `--class
 create-cpp-class -c AwesomeClassName
 ```
 
-This will still require you to agree to the [disclaimer](#Disclaimer), and to set the appropriate header/source file and extensions, unless used with the [accept defaults flag](#Accept Defaults: --yes (-y)) 
+This will still require you to agree to the [disclaimer](#Disclaimer), and to set the appropriate header/source file and extensions, unless used with the [accept defaults flag](#accept-defaults---yes--y)
 
 ### Exclude Source Files: `--no-source` (`-n`)
 
-If you don't want to use a separate file for class implementation (i.e. have the class all contained in the header file), pass in the `--no-source` (or `-n`) flag and these prompts will be skipped. You will still need to to agree to the [disclaimer](#Disclaimer), and set appropriate header extension and locations, unless used with the  [accept defaults flag](#Accept Defaults: --yes (-y)) 
+If you don't want to use a separate file for class implementation (i.e. have the class all contained in the header file), pass in the `--no-source` (or `-n`) flag and these prompts will be skipped. You will still need to to agree to the [disclaimer](#Disclaimer), and set appropriate header extension and locations, unless used with the  [accept defaults flag](#accept-defaults---yes--y)
 
 ### Dry Run: `--dry-run` (`-d`)
 
-If you just want to see what the CLI will produce, use the `--dry-run` (or `-d`) flag. This will bypass the [disclaimer](#Disclaimer) , but you will still need to answer the other prompts, unless used with the  [accept defaults flag](#Accept Defaults: --yes (-y)) . **NO FILES WILL BE WRITTEN TO YOUR DISK WITH THIS COMMAND**
+If you just want to see what the CLI will produce, use the `--dry-run` (or `-d`) flag. This will bypass the [disclaimer](#Disclaimer) , but you will still need to answer the other prompts, unless used with the  [accept defaults flag](#accept-defaults---yes--y) **NO FILES WILL BE WRITTEN TO YOUR DISK WITH THIS COMMAND**
 
 ### Advanced Usage
 
