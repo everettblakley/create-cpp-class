@@ -1,6 +1,6 @@
 {
   "name": "@everettblakley/create-cpp-class",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "A CLI to bootstrap creating a C++ class",
   "bin": {
     "@everettblakley/create-cpp-class": "bin/create-cpp-class",
