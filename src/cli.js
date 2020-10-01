@@ -35,7 +35,7 @@ function parseArgumentsIntoOptions(rawArgs) {
 
   return {
     skipPrompts: args['--yes'] || false,
-    createSource: !args['--no-source'] || false,
+    createSource: args['--no-source'] !== undefined,
     dryRun: args['--dry-run'],
     className,
     help: args['--help'],
@@ -79,6 +79,7 @@ async function promptForMissingOptions(options) {
   const defaultSourceDir = 'src';
   const defaultHeaderExt = '.h';
   const defaultSourceExt = '.cpp';
+  const defaultCreateSource = true;
 
   const questions = [];
 
@@ -154,11 +155,19 @@ async function promptForMissingOptions(options) {
     });
 
     questions.push({
+      type: 'confirm',
+      name: 'createSource',
+      message: 'Do you want to create a separate source file for the class implementation?',
+      default: true,
+      when: () => options.createSource !== true,
+    });
+
+    questions.push({
       type: 'input',
       name: 'sourceDir',
       message: 'Where would you like to put your source file?',
       default: defaultSourceDir,
-      when: options.createSource,
+      when: (answers) => options.createSource || answers.createSource,
     });
 
     questions.push({
@@ -168,7 +177,7 @@ async function promptForMissingOptions(options) {
         'What would you like the file extension of your source file to be?',
       choices: ['.cpp', '.cc', '.cxx'],
       default: defaultSourceExt,
-      when: options.createSource,
+      when: (answers) => options.createSource || answers.createSource,
     });
   }
 
@@ -179,6 +188,7 @@ async function promptForMissingOptions(options) {
   const headerExt = answers.headerExt || defaultHeaderExt;
   const sourceDir = answers.sourceDir || defaultSourceDir;
   const sourceExt = answers.sourceExt || defaultSourceExt;
+  const createSource = answers.createSource || options.createSource || defaultCreateSource;
 
   console.log();
 
@@ -187,7 +197,7 @@ async function promptForMissingOptions(options) {
   }
   console.log(`Class name: ${greenBoldText(className)}`);
   console.log(`Header file: ${greenBoldText(`${headerDir}/${className}${headerExt}`)}`);
-  if (options.createSource) {
+  if (createSource) {
     console.log(`Source file: ${greenBoldText(`${sourceDir}/${className}${sourceExt}`)}`);
   }
 
@@ -205,6 +215,7 @@ async function promptForMissingOptions(options) {
   return {
     ...options,
     ...answers,
+    createSource,
     proceed,
     className,
     headerDir,
